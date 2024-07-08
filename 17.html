@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transformada de Laplace</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+        .steps {
+            text-align: left;
+            margin-top: 20px;
+            max-width: 600px;
+        }
+        .steps pre {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .steps p {
+            margin: 10px 0;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Transformada de Laplace: e<sup>bt</sup> t<sup>n</sup></h1>
+    <div>
+        <label for="b">Valor de b: </label>
+        <input type="text" id="b" value="1">
+    </div>
+    <div>
+        <label for="n">Valor de n: </label>
+        <input type="text" id="n" value="1">
+    </div>
+    <button onclick="calcular()">Calcular</button>
+    <div class="steps" id="steps"></div>
+
+    <script>
+        function calcular() {
+            const stepsDiv = document.getElementById('steps');
+            stepsDiv.innerHTML = '';
+
+            const bValue = document.getElementById('b').value;
+            const nValue = document.getElementById('n').value;
+            const b = parseFloat(bValue);
+            const n = parseInt(nValue, 10);
+
+            if (isNaN(b) || isNaN(n)) {
+                stepsDiv.innerHTML = '<p class="error">Error: Por favor, ingrese valores numéricos.</p>';
+                return;
+            }
+
+            if (b === 0 || n === 0) {
+                stepsDiv.innerHTML = '<p class="error">Error: Los valores no pueden ser cero.</p>';
+                return;
+            }
+
+            const steps = [
+                {text: `1. Empezamos con la fórmula: e<sup>bt</sup> t<sup>n</sup>`},
+                {text: `2. Aplicamos la transformada de Laplace: \\[ \\mathcal{L}\\{ e^{bt} t^n \\} \\]`},
+                {text: `3. Usamos la propiedad de desplazamiento: \\[ \\mathcal{L}\\{ e^{bt} f(t) \\} = F(s-b) \\]`},
+                {text: `4. Sabemos que: \\[ \\mathcal{L}\\{ t^n \\} = \\frac{n!}{s^{n+1}} \\]`},
+                {text: `5. Aplicamos la propiedad de desplazamiento: \\[ \\mathcal{L}\\{ e^{bt} t^n \\} = \\frac{n!}{(s-b)^{n+1}} \\]`},
+                {text: `6. El resultado final es: \\[ \\mathcal{L}\\{ e^{${b}t} t^{${n}} \\} = \\frac{${n}!}{(s-${b})^{${n+1}}} \\]`}
+            ];
+
+            steps.forEach(step => {
+                const stepElement = document.createElement('p');
+                stepElement.innerHTML = step.text;
+                stepsDiv.appendChild(stepElement);
+            });
+
+            renderMathInElement(stepsDiv, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ]
+            });
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.css">
+</body>
+</html>

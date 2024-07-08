@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transformada de Laplace: t^m e^(bt)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+        .steps {
+            text-align: left;
+            margin-top: 20px;
+            max-width: 600px;
+        }
+        .steps p {
+            margin: 10px 0;
+        }
+        .error {
+            color: red;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Transformada de Laplace: t^m e^{bt}</h1>
+    <div>
+        <label for="m">Valor de m: </label>
+        <input type="number" id="m" value="1">
+    </div>
+    <div>
+        <label for="b">Valor de b: </label>
+        <input type="number" id="b" value="1">
+    </div>
+    <button onclick="calcular()">Calcular</button>
+    <div class="steps" id="steps"></div>
+    <div class="error" id="error"></div>
+
+    <script>
+        function calcular() {
+            const m = parseFloat(document.getElementById('m').value);
+            const b = parseFloat(document.getElementById('b').value);
+            const stepsDiv = document.getElementById('steps');
+            const errorDiv = document.getElementById('error');
+
+            stepsDiv.innerHTML = '';
+            errorDiv.innerHTML = '';
+
+            if (isNaN(m) || isNaN(b)) {
+                errorDiv.innerHTML = 'Por favor ingresa números válidos para m y b.';
+                return;
+            }
+            if (m < 0) {
+                errorDiv.innerHTML = 'm debe ser un número positivo.';
+                return;
+            }
+            if (m === 0 || b === 0) {
+                errorDiv.innerHTML = 'm y b no pueden ser 0.';
+                return;
+            }
+
+            const steps = [
+                {text: `1. Empezamos con la fórmula: \( t^m e^{bt} \)`},
+                {text: `2. Aplicamos la transformada de Laplace: \\[ \\mathcal{L}\\{ t^m e^{bt} \\} = \\frac{m!}{(s-b)^{m+1}} \\]`},
+                {text: `3. Sustituimos m y b: \\[ \\mathcal{L}\\{ t^${m} e^{${b}t} \\} = \\frac{${factorial(m)}}{(s-${b})^{${m+1}}} \\]`}
+            ];
+
+            steps.forEach(step => {
+                const stepElement = document.createElement('p');
+                stepElement.innerHTML = step.text;
+                stepsDiv.appendChild(stepElement);
+            });
+
+            renderMathInElement(stepsDiv, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ]
+            });
+        }
+
+        function factorial(n) {
+            if (n === 0 || n === 1) return 1;
+            return n * factorial(n - 1);
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.css">
+</body>
+</html>

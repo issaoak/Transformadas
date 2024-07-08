@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transformada de Laplace: t^n e^at</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+        .steps {
+            text-align: left;
+            margin-top: 20px;
+            max-width: 600px;
+        }
+        .steps pre {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .steps p {
+            margin: 10px 0;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Transformada de Laplace: t^n e^at</h1>
+    <div>
+        <label for="a">Valor de a: </label>
+        <input type="text" id="a" value="">
+    </div>
+    <div>
+        <label for="n">Valor de n: </label>
+        <input type="text" id="n" value="">
+    </div>
+    <button onclick="calcular()">Calcular</button>
+    <div class="steps" id="steps"></div>
+
+    <script>
+        function calcular() {
+            const aValue = document.getElementById('a').value;
+            const nValue = document.getElementById('n').value;
+            const stepsDiv = document.getElementById('steps');
+            stepsDiv.innerHTML = '';
+
+            const a = parseFloat(aValue);
+            const n = parseInt(nValue);
+
+            if (isNaN(a) || aValue.trim() === "" || isNaN(n) || nValue.trim() === "") {
+                const errorElement = document.createElement('p');
+                errorElement.className = 'error';
+                errorElement.innerHTML = 'Por favor, ingrese números válidos para a y n.';
+                stepsDiv.appendChild(errorElement);
+                return;
+            }
+
+            if (a === 0) {
+                const errorElement = document.createElement('p');
+                errorElement.className = 'error';
+                errorElement.innerHTML = 'El valor de a no puede ser 0.';
+                stepsDiv.appendChild(errorElement);
+                return;
+            }
+
+            if (n < 0) {
+                const errorElement = document.createElement('p');
+                errorElement.className = 'error';
+                errorElement.innerHTML = 'El valor de n no puede ser negativo.';
+                stepsDiv.appendChild(errorElement);
+                return;
+            }
+
+            const factorial = (num) => {
+                if (num === 0) return 1;
+                return num * factorial(num - 1);
+            };
+
+            const nFactorial = factorial(n);
+
+            const steps = [
+                {text: `1. Empezamos con la función: \\( t^n e^{at} \\)`},
+                {text: `2. Aplicamos la transformada de Laplace: \\( \\mathcal{L}\\{ t^n e^{at} \\} \\)`},
+                {text: `3. Usamos la propiedad de la función exponencial y t: \\( \\mathcal{L}\\{ t^n e^{at} \\} = \\frac{n!}{(s-a)^{n+1}} \\)`},
+                {text: `4. Sustituimos los valores de a y n: \\( \\mathcal{L}\\{ t^n e^{${a}t} \\} = \\frac{${n}!}{(s-${a})^{${n+1}}} \\)`},
+                {text: `5. Calculamos el factorial de n: \\( ${n}! = ${nFactorial} \\)`},
+                {text: `6. El resultado final es: \\( \\mathcal{L}\\{ t^n e^{${a}t} \\} = \\frac{${nFactorial}}{(s-${a})^{${n+1}}} \\)`}
+            ];
+
+            steps.forEach(step => {
+                const stepElement = document.createElement('p');
+                stepElement.innerHTML = step.text;
+                stepsDiv.appendChild(stepElement);
+            });
+
+            renderMathInElement(stepsDiv, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ]
+            });
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.css">
+</body>
+</html>

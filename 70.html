@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transformada de Laplace: e^-bt cosh(at)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+        .steps {
+            text-align: left;
+            margin-top: 20px;
+            max-width: 600px;
+        }
+        .steps pre {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .steps p {
+            margin: 10px 0;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.css">
+</head>
+<body>
+    <h1>Transformada de Laplace: \( e^{-bt} \cosh(at) \)</h1>
+    <div>
+        <label for="a">Valor de a: </label>
+        <input type="number" id="a" value="1">
+    </div>
+    <div>
+        <label for="b">Valor de b: </label>
+        <input type="number" id="b" value="1">
+    </div>
+    <button onclick="calcular()">Calcular</button>
+    <div class="steps" id="steps"></div>
+
+    <script>
+        function calcular() {
+            const a = parseFloat(document.getElementById('a').value);
+            const b = parseFloat(document.getElementById('b').value);
+            const stepsDiv = document.getElementById('steps');
+
+            // Limpiar pasos anteriores
+            stepsDiv.innerHTML = '';
+
+            // Pasos para resolver
+            const steps = [
+                {text: "1. La transformada de Laplace que se usa es: \\[ \\mathcal{L}\\{ e^{-bt} \cosh(at) \\} = \\frac{s - b}{(s - b)^2 - a^2} \\]"},
+                {text: "2. Sustituimos \\( a \\) y \\( b \\): \\[ \\mathcal{L}\\{ e^{- " + b + "t} \cosh(" + a + "t) \\} = \\frac{s - " + b + "}{(s - " + b + ")^2 - " + a + "^2} \\]"}
+            ];
+
+            // Mostrar cada paso
+            steps.forEach(step => {
+                const stepElement = document.createElement('p');
+                stepElement.innerHTML = step.text;
+                stepsDiv.appendChild(stepElement);
+            });
+
+            renderMathInElement(stepsDiv, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ]
+            });
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/contrib/auto-render.min.js"></script>
+</body>
+</html>

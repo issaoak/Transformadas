@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transformada de Laplace</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+        .steps {
+            text-align: left;
+            margin-top: 20px;
+            max-width: 600px;
+        }
+        .steps pre {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .steps p {
+            margin: 10px 0;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Transformada de Laplace: t sin(at)</h1>
+    <div>
+        <label for="a">Valor de a: </label>
+        <input type="number" id="a">
+    </div>
+    <button onclick="calcular()">Calcular</button>
+    <div class="steps" id="steps"></div>
+
+    <script>
+        function calcular() {
+            const a = parseFloat(document.getElementById('a').value);
+            const stepsDiv = document.getElementById('steps');
+
+            stepsDiv.innerHTML = '';
+
+            if (isNaN(a)) {
+                stepsDiv.innerHTML = '<p class="error">Por favor, ingrese un número válido para a.</p>';
+                return;
+            }
+            if (a === 0) {
+                stepsDiv.innerHTML = '<p class="error">El valor de a no puede ser cero.</p>';
+                return;
+            }
+
+            const steps = [
+                {text: `1. Empezamos con la fórmula: t sin(at)`},
+                {text: `2. Aplicamos la transformada de Laplace: \\[ \\mathcal{L}\\{ t \\sin(at) \\} = \\frac{2as}{(s^2 + a^2)^2} \\]`},
+                {text: `3. Sustituimos el valor de a: \\[ \\mathcal{L}\\{ t \\sin(${a}t) \\} = \\frac{2 \\cdot ${a} \\cdot s}{(s^2 + ${a}^2)^2} \\]`},
+                {text: `4. El resultado final es: \\[ \\mathcal{L}\\{ t \\sin(${a}t) \\} = \\frac{${2 * a}s}{(s^2 + ${a}^2)^2} \\]`}
+            ];
+
+            steps.forEach(step => {
+                const stepElement = document.createElement('p');
+                stepElement.innerHTML = step.text;
+                stepsDiv.appendChild(stepElement);
+            });
+
+            renderMathInElement(stepsDiv, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ]
+            });
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.css">
+</body>
+</html>

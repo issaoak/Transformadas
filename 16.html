@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transformada de Laplace</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+        .steps {
+            text-align: left;
+            margin-top: 20px;
+            max-width: 600px;
+        }
+        .steps pre {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .steps p {
+            margin: 10px 0;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Transformada de Laplace: cosh(at) sinh(bt)</h1>
+    <div>
+        <label for="a">Valor de a: </label>
+        <input type="text" id="a" value="1">
+    </div>
+    <div>
+        <label for="b">Valor de b: </label>
+        <input type="text" id="b" value="1">
+    </div>
+    <button onclick="calcular()">Calcular</button>
+    <div class="steps" id="steps"></div>
+
+    <script>
+        function calcular() {
+            const stepsDiv = document.getElementById('steps');
+            stepsDiv.innerHTML = '';
+
+            const aValue = document.getElementById('a').value;
+            const bValue = document.getElementById('b').value;
+            const a = parseFloat(aValue);
+            const b = parseFloat(bValue);
+
+            if (isNaN(a) || isNaN(b)) {
+                stepsDiv.innerHTML = '<p class="error">Error: Por favor, ingrese valores numéricos.</p>';
+                return;
+            }
+
+            if (a === 0 || b === 0) {
+                stepsDiv.innerHTML = '<p class="error">Error: Los valores no pueden ser cero.</p>';
+                return;
+            }
+
+            const steps = [
+                {text: `1. Empezamos con la fórmula: cosh(at) sinh(bt)`},
+                {text: `2. Usamos la identidad: cosh(at) sinh(bt) = 0.5 [sinh((a+b)t) - sinh((a-b)t)]`},
+                {text: `3. Aplicamos la transformada de Laplace: \\[ \\mathcal{L}\\{ cosh(at) sinh(bt) \\} = \\mathcal{L}\\{ 0.5 [sinh((a+b)t) - sinh((a-b)t)] \\} \\]`},
+                {text: `4. Usamos la propiedad de linealidad: \\[ \\mathcal{L}\\{ 0.5 [sinh((a+b)t) - sinh((a-b)t)] \\} = 0.5 [\\mathcal{L}\\{ sinh((a+b)t) \\} - \\mathcal{L}\\{ sinh((a-b)t) \\}] \\]`},
+                {text: `5. Sabemos que: \\[ \\mathcal{L}\\{ sinh(kt) \\} = \\frac{k}{s^2 - k^2} \\]`},
+                {text: `6. Sustituimos k por (a+b) y (a-b): \\[ \\mathcal{L}\\{ sinh((a+b)t) \\} = \\frac{a+b}{s^2 - (a+b)^2} \\] y \\[ \\mathcal{L}\\{ sinh((a-b)t) \\} = \\frac{a-b}{s^2 - (a-b)^2} \\]`},
+                {text: `7. Combinamos las partes: \\[ 0.5 \\left( \\frac{a+b}{s^2 - (a+b)^2} - \\frac{a-b}{s^2 - (a-b)^2} \\right) \\]`},
+                {text: `8. El resultado final es: \\[ \\mathcal{L}\\{ cosh(${a}t) sinh(${b}t) \\} = 0.5 \\left( \\frac{${a+b}}{s^2 - (${a+b})^2} - \\frac{${a-b}}{s^2 - (${a-b})^2} \\right) \\]`}
+            ];
+
+            steps.forEach(step => {
+                const stepElement = document.createElement('p');
+                stepElement.innerHTML = step.text;
+                stepsDiv.appendChild(stepElement);
+            });
+
+            renderMathInElement(stepsDiv, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ]
+            });
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.css">
+</body>
+</html>

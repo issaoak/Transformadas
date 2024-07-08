@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transformada de Laplace</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+        .steps {
+            text-align: left;
+            margin-top: 20px;
+            max-width: 600px;
+        }
+        .steps pre {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .steps p {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Transformada de Laplace: cos(bt)</h1>
+    <div>
+        <label for="b">Valor de b: </label>
+        <input type="number" id="b" value="1">
+    </div>
+    <button onclick="calcular()">Calcular</button>
+    <div class="steps" id="steps"></div>
+
+    <script>
+        function calcular() {
+            const b = parseFloat(document.getElementById('b').value);
+            const stepsDiv = document.getElementById('steps');
+
+            stepsDiv.innerHTML = '';
+
+            const steps = [
+                {text: `1. Empezamos con la fórmula: cos(bt)`},
+                {text: `2. Aplicamos la transformada de Laplace: \\[ \\mathcal{L}\\{ cos(bt) \\} \\]`},
+                {text: `3. Usamos la fórmula conocida: \\[ \\mathcal{L}\\{ cos(bt) \\} = \\frac{s}{s^2 + b^2} \\]`},
+                {text: `4. Sustituimos b: \\[ \\mathcal{L}\\{ cos(${b}t) \\} = \\frac{s}{s^2 + ${b}^2} \\]`},
+                {text: `5. El resultado final es: \\[ \\mathcal{L}\\{ cos(${b}t) \\} = \\frac{s}{s^2 + ${b**2}} \\]`}
+            ];
+
+            steps.forEach(step => {
+                const stepElement = document.createElement('p');
+                stepElement.innerHTML = step.text;
+                stepsDiv.appendChild(stepElement);
+            });
+
+            renderMathInElement(stepsDiv, {
+                delimiters: [
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ]
+            });
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.css">
+</body>
+</html>
